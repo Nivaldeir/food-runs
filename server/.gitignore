@@ -1,0 +1,40 @@
+# Arquivos e diretórios a serem ignorados pelo Git
+
+# Arquivos de compilação e build
+*.o
+*.out
+*.log
+build/
+dist/
+
+# Dependências e módulos
+node_modules/
+vendor/
+
+# Arquivos gerados por IDEs ou editores de texto
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Arquivos de configuração
+.env
+.env.local
+.env.*.local
+
+# Arquivos de cache e temporários
+.cache/
+.tmp/
+.temp/
+.temp-*
+
+# Arquivos de backup
+*.bak
+*.backup
+*.swp
+
+# Arquivos de histórico de comandos
+.history/
+
+# Outros arquivos específicos do seu projeto que você deseja ignorar
+

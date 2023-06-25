@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+type Address {
+  location String
+  number   String
+}
+
+type Geolocation {
+  latitude  Float
+  longitude Float
+}
+
+type Moto {
+  placa  String
+  modelo String
+  ano    String
+}
+
+model Schema {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  value    Int
+  quantity Int
+  Company  Company[]
+
+  @@map("schemas")
+}
+
+model Company {
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  avatar    String
+  actived   Boolean     @default(false)
+  cnpj      String?     @unique
+  email     String      @unique
+  password  String
+  geo       Geolocation
+  cellphone String      @unique
+  isAdmin   Boolean     @default(false)
+  createAt  DateTime    @default(now())
+  updatedAt DateTime    @default(now()) @updatedAt
+  schema    Schema      @relation(fields: [schemaId], references: [id])
+  schemaId  String      @db.ObjectId
+  Other     Other[]
+
+  @@map("companys")
+}
+
+model Motoboy {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  lastname  String
+  avatar    String
+  actived   Boolean  @default(false)
+  cpf       String   @unique
+  email     String   @unique
+  password  String
+  cellphone String   @unique
+  address   Address
+  latitude  Float
+  longitude Float
+  inRunning Boolean? @default(false)
+  moto      Moto
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  Other     Other[]
+
+  @@map("motoboys")
+}
+
+model Other {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  motoboy   Motoboy? @relation(fields: [motoboyId], references: [id])
+  motoboyId String?  @db.ObjectId
+  company   Company  @relation(fields: [companyId], references: [id])
+  companyId String   @db.ObjectId
+
+  status    STATUS
+  address   String
+  number    String
+  geo       Geolocation
+  value     Int
+  createAt  DateTime    @default(now())
+  updatedAt DateTime    @default(now()) @updatedAt
+}
+
+enum STATUS {
+  MOTOBOY
+  MOTOBOY_ENTEGRANDO
+  CONCLUIDO
+  CANCELADO
+}
